@@ -2,6 +2,7 @@ package service.account;
 
 import model.Account;
 import model.builder.AccountBuilder;
+import model.dto.AccountDto;
 import model.validation.AccountValidator;
 import model.validation.Notification;
 import model.validation.Validator;
@@ -9,6 +10,7 @@ import repository.EntityNotFoundException;
 import repository.account.AccountRepository;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 public class AccountServiceIMP implements AccountService{
@@ -46,6 +48,30 @@ public class AccountServiceIMP implements AccountService{
                 .setBalance(balance)
                 .setDateOfCreation()
                 .setIdClient(idClient)
+                .build();
+
+        AccountValidator accountValidator = new AccountValidator(account);
+        boolean accountValid = accountValidator.validate();
+        Notification<Boolean> accountNotification = new Notification<>();
+
+        if(!accountValid) {
+            accountValidator.getErrors().forEach(accountNotification::addError);
+            accountNotification.setResult(Boolean.FALSE);
+        }
+        else
+            accountNotification.setResult(accountRepository.create(account));
+
+        return accountNotification;
+    }
+
+    @Override
+    public Notification<Boolean> create2(AccountDto accountDto) {
+        Account account = new AccountBuilder()
+                .setBalance(accountDto.getBalance())
+                .setDateOfCreation()
+                .setId(accountDto.getId())
+                .setIdClient(accountDto.getClientId())
+                .setType(accountDto.getType())
                 .build();
 
         AccountValidator accountValidator = new AccountValidator(account);

@@ -4,11 +4,14 @@ import model.Account;
 import model.Client;
 import model.builder.AccountBuilder;
 import model.builder.ClientBuilder;
+import model.dto.AccountDto;
+import model.dto.ClientDto;
 import model.validation.Notification;
 import service.account.AccountService;
 import service.client.ClientService;
 import service.report.ReportService;
 import view.EmployeeView;
+
 import java.sql.Date;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -68,23 +71,17 @@ public class EmployeeController {
     private class CreateAccountButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
+            AccountDto accountDto = new AccountDto(Integer.parseInt(employeeView.getIdNoTxt()), employeeView.getTypeTxt(), Integer.parseInt(employeeView.getAmountTxt()), Date.valueOf(employeeView.getDateTxt()), Integer.parseInt(employeeView.getIdClientTxt()));
 
-            String cardNo = employeeView.getIdNoTxt();
-            String type = employeeView.getTypeTxt();
-            String balance = employeeView.getAmountTxt();
-            String date = employeeView.getDateTxt();
-            String clientId = employeeView.getIdClientTxt();
 
-            Notification<Boolean> accountNotification = accountService.create(Long.parseLong(cardNo), type, Integer.parseInt(balance), null, Integer.parseInt(clientId));
+            Notification<Boolean> accountNotification = accountService.create2(accountDto);
 
             if (accountNotification.hasErrors()) {
                 JOptionPane.showMessageDialog(employeeView.getContentPane(), accountNotification.getFormattedErrors());
-            }
-            else {
+            } else {
                 if (!accountNotification.getResult()) {
                     JOptionPane.showMessageDialog(employeeView.getContentPane(), "Account creation failed");
-                }
-                else {
+                } else {
                     JOptionPane.showMessageDialog(employeeView.getContentPane(), "Account created");
                     updateAccountTable();
                     reportService.addReport(getIdEmployee(), new Date(System.currentTimeMillis()), "Created account.");
@@ -97,26 +94,9 @@ public class EmployeeController {
         @Override
         public void actionPerformed(ActionEvent e) {
 
-            Account account = getAccountFromTable();
-            String type = employeeView.getTypeTxt();
-            String balance  = employeeView.getAmountTxt();
-            String date = employeeView.getDateTxt();
-            String clientId = employeeView.getIdClientTxt();
-            System.out.println(date);
-            SimpleDateFormat sdf1 = new SimpleDateFormat("dd-mm-yyyy");
-            java.util.Date date1 = null;
-            try {
-                date1 = sdf1.parse(date);
-            } catch (ParseException parseException) {
-                parseException.printStackTrace();
-            }
-            java.sql.Date sqlStartDate = new java.sql.Date(date1.getTime());
-
-
-            accountService.update( account.getId(),  type, Integer.parseInt(balance), sqlStartDate, Integer.parseInt(clientId));
-
+            AccountDto accountDto = new AccountDto(Integer.parseInt(employeeView.getIdNoTxt()), employeeView.getTypeTxt(), Integer.parseInt(employeeView.getAmountTxt()), Date.valueOf(employeeView.getDateTxt()), Integer.parseInt(employeeView.getIdClientTxt()));
+            accountService.update(accountDto.getId(), accountDto.getType(), accountDto.getBalance(), (Date) accountDto.getDate(), accountDto.getClientId());
             updateAccountTable();
-
             reportService.addReport(getIdEmployee(), new Date(System.currentTimeMillis()), "Updated account.");
         }
     }
@@ -134,20 +114,16 @@ public class EmployeeController {
     private class CreateClientButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            String name = employeeView.getNameTxt();
-            String address = employeeView.getAddressTxt();
-            String CNP = employeeView.getCNPTxt();
+            ClientDto clientDto = new ClientDto(employeeView.getName(),employeeView.getAddressTxt(),Integer.parseInt(employeeView.getCNPTxt()));
 
-            Notification<Boolean> clientNotification = clientService.create(name, address, CNP);
+            Notification<Boolean> clientNotification = clientService.create2(clientDto);
 
             if (clientNotification.hasErrors()) {
                 JOptionPane.showMessageDialog(employeeView.getContentPane(), clientNotification.getFormattedErrors());
-            }
-            else {
+            } else {
                 if (!clientNotification.getResult()) {
                     JOptionPane.showMessageDialog(employeeView.getContentPane(), "Client creation failed");
-                }
-                else {
+                } else {
                     JOptionPane.showMessageDialog(employeeView.getContentPane(), "Client created");
                     updateClientTable();
                     reportService.addReport(getIdEmployee(), new Date(System.currentTimeMillis()), "Created client");
@@ -161,12 +137,10 @@ public class EmployeeController {
         public void actionPerformed(ActionEvent e) {
 
             Client client = getClientFromTable();
+            ClientDto clientDto = new ClientDto(employeeView.getName(),employeeView.getAddressTxt(),Integer.parseInt(employeeView.getCNPTxt()));
 
-            String name = employeeView.getNameTxt();
-            String address = employeeView.getAddressTxt();
-            String CNP = employeeView.getCNPTxt();
 
-            clientService.update(client.getId(), name, address, CNP);
+            clientService.update2(clientDto);
 
             updateClientTable();
 
@@ -179,7 +153,7 @@ public class EmployeeController {
         public void actionPerformed(ActionEvent e) {
 
             for (Account a : accountService.findAll()) {
-                if(a.getClient_id() == getClientFromTable().getId())
+                if (a.getClient_id() == getClientFromTable().getId())
                     accountService.remove(a.getId());
             }
 
@@ -199,8 +173,8 @@ public class EmployeeController {
             a1 = accountService.findById(Integer.parseInt(employeeView.getFirstAcc()));
             a2 = accountService.findById(Integer.parseInt(employeeView.getSecondAcc()));
 
-            accountService.update(a1.getId(),a1.getType(),a1.getBalance() - Integer.parseInt(employeeView.getSumTxt()), a1.getCreation_date() , a1.getClient_id());
-            accountService.update(a2.getId(),a2.getType(),a2.getBalance() + Integer.parseInt(employeeView.getSumTxt()), a2.getCreation_date() , a2.getClient_id());
+            accountService.update(a1.getId(), a1.getType(), a1.getBalance() - Integer.parseInt(employeeView.getSumTxt()), a1.getCreation_date(), a1.getClient_id());
+            accountService.update(a2.getId(), a2.getType(), a2.getBalance() + Integer.parseInt(employeeView.getSumTxt()), a2.getCreation_date(), a2.getClient_id());
 
             updateAccountTable();
 
@@ -212,7 +186,7 @@ public class EmployeeController {
         @Override
         public void actionPerformed(ActionEvent e) {
             Account account = getAccountFromTable();
-            accountService.update(account.getId(),  account.getType(), account.getBalance() - Integer.parseInt(employeeView.getProcessTxt()), account.getCreation_date(), account.getClient_id());
+            accountService.update(account.getId(), account.getType(), account.getBalance() - Integer.parseInt(employeeView.getProcessTxt()), account.getCreation_date(), account.getClient_id());
 
             updateAccountTable();
 
@@ -247,10 +221,10 @@ public class EmployeeController {
 
     public Client getClientFromTable() {
 
-        Integer id = (Integer) employeeView.getTableClients().getValueAt(employeeView.getTableClients().getSelectedRow(),0);
-        String name = (String)  employeeView.getTableClients().getValueAt(employeeView.getTableClients().getSelectedRow(),1);
-        String address = (String)  employeeView.getTableClients().getValueAt(employeeView.getTableClients().getSelectedRow(),2);
-        String CNP = (String) employeeView.getTableClients().getValueAt(employeeView.getTableClients().getSelectedRow(),3);
+        Integer id = (Integer) employeeView.getTableClients().getValueAt(employeeView.getTableClients().getSelectedRow(), 0);
+        String name = (String) employeeView.getTableClients().getValueAt(employeeView.getTableClients().getSelectedRow(), 1);
+        String address = (String) employeeView.getTableClients().getValueAt(employeeView.getTableClients().getSelectedRow(), 2);
+        String CNP = (String) employeeView.getTableClients().getValueAt(employeeView.getTableClients().getSelectedRow(), 3);
 
         Client c = new ClientBuilder()
                 .setId(id)
@@ -264,11 +238,11 @@ public class EmployeeController {
 
     public Account getAccountFromTable() {
 
-        Integer accountId = (Integer) employeeView.getTableAccounts().getValueAt(employeeView.getTableAccounts().getSelectedRow(),0);
-        String type = String.valueOf(employeeView.getTableAccounts().getValueAt(employeeView.getTableAccounts().getSelectedRow(),1));
-        Integer balance = (Integer)  employeeView.getTableAccounts().getValueAt(employeeView.getTableAccounts().getSelectedRow(),2);
-        Date date = (Date) employeeView.getTableAccounts().getValueAt(employeeView.getTableAccounts().getSelectedRow(),3);
-        Integer idClient = (Integer)  employeeView.getTableAccounts().getValueAt(employeeView.getTableAccounts().getSelectedRow(),4);
+        Integer accountId = (Integer) employeeView.getTableAccounts().getValueAt(employeeView.getTableAccounts().getSelectedRow(), 0);
+        String type = String.valueOf(employeeView.getTableAccounts().getValueAt(employeeView.getTableAccounts().getSelectedRow(), 1));
+        Integer balance = (Integer) employeeView.getTableAccounts().getValueAt(employeeView.getTableAccounts().getSelectedRow(), 2);
+        Date date = (Date) employeeView.getTableAccounts().getValueAt(employeeView.getTableAccounts().getSelectedRow(), 3);
+        Integer idClient = (Integer) employeeView.getTableAccounts().getValueAt(employeeView.getTableAccounts().getSelectedRow(), 4);
 
         Account a = new AccountBuilder()
                 .setId(accountId)
@@ -280,7 +254,7 @@ public class EmployeeController {
         return a;
     }
 
-    public void updateAccountTable(){
+    public void updateAccountTable() {
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn("id");
         model.addColumn("type");
@@ -296,7 +270,7 @@ public class EmployeeController {
         employeeView.getTableAccounts().setModel(model);
     }
 
-    public void updateClientTable(){
+    public void updateClientTable() {
         DefaultTableModel model2 = new DefaultTableModel();
         model2.addColumn("id");
         model2.addColumn("name");
@@ -304,7 +278,7 @@ public class EmployeeController {
         model2.addColumn("CNP");
 
         for (Client c : clientService.findAll()) {
-            Object[] o = {c.getId(), c.getName(),  c.getAddress(), c.getCNP()};
+            Object[] o = {c.getId(), c.getName(), c.getAddress(), c.getCNP()};
             model2.addRow(o);
         }
 

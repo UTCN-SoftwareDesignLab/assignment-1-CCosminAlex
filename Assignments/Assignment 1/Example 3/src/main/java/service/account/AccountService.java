@@ -1,6 +1,7 @@
 package service.account;
 
 import model.Account;
+import model.dto.AccountDto;
 import model.validation.Notification;
 
 import java.sql.Date;
@@ -12,6 +13,8 @@ public interface AccountService {
     boolean update(int id, String type, int balance, Date date, int idClient);
 
     Notification<Boolean> create(long cardNo, String type, int balance, Date date, int idClient);
+
+    Notification<Boolean> create2(AccountDto accountDto);
 
     Account findById(int id);
 
