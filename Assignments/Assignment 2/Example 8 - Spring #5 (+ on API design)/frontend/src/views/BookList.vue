@@ -10,7 +10,7 @@
         single-line
         hide-details
       ></v-text-field>
-      <v-btn @click="addBook">Add Book</v-btn>
+      <v-btn @click="addBook">Create Book</v-btn>
       <v-btn @click="sellBook">Sell Book</v-btn>
     </v-card-title>
     <v-data-table

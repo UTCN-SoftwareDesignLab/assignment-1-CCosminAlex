@@ -7,7 +7,7 @@
     <template>
       <v-card>
         <v-toolbar color="primary" dark>
-          {{ isNew ? "Edit book" : "Create book" }}
+          {{ isNew ? "Create book" : "Edit book" }}
         </v-toolbar>
         <v-form>
           <v-text-field v-model="book.title" label="Title" />
@@ -18,7 +18,7 @@
         </v-form>
         <v-card-actions>
           <v-btn @click="persist">
-            {{ isNew ? "Save"  : "Create" }}
+            {{ isNew ? "Create"  : "Save" }}
           </v-btn>
         </v-card-actions>
       </v-card>

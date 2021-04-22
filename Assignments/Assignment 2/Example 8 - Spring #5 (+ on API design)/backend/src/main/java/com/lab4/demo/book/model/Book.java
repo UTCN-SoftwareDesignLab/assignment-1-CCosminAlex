@@ -18,7 +18,7 @@ public class Book {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idBook;
+    private Long id;
 
     @Column
     private String title;
@@ -35,7 +35,4 @@ public class Book {
     @Column
     private double price;
 
-    @ManyToOne
-    @JoinColumn(name = "id")
-    private Users user;
 }

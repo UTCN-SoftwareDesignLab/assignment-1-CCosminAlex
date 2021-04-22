@@ -45,7 +45,6 @@ public class Users {
     @Builder.Default
     private Set<Role> roles = new HashSet<>();
 
-    @OneToMany(mappedBy = "user")
-    private List<Book> books;
+
 
 }
