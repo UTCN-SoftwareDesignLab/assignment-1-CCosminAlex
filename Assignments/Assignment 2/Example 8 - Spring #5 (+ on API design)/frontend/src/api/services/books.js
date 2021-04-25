@@ -15,6 +15,13 @@ export default {
         }
     );
   },
+    changeQuantity(book, amount) {
+        return HTTP.patch(BASE_URL + "/sell/" + book,amount,{headers: authHeader()}).then(
+            (response) => {
+                return response.data;
+            }
+        );
+    },
   edit( book ) {
     return HTTP.put(BASE_URL + "/books", book, {headers: authHeader()}).then(
         (response) => {

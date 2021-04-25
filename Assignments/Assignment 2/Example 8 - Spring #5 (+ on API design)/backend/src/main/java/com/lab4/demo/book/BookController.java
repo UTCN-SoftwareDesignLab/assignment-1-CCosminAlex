@@ -1,5 +1,6 @@
 package com.lab4.demo.book;
 
+import com.lab4.demo.book.model.Book;
 import com.lab4.demo.book.model.dto.BookDTO;
 import com.lab4.demo.item.ItemService;
 import com.lab4.demo.item.model.dto.ItemDTO;
@@ -33,8 +34,8 @@ public class BookController {
     }
 
     @PatchMapping(ENTITY)
-    public BookDTO changeQuantity(@PathVariable Long id, @RequestBody int newQuantity) {
-        return bookService.changeQuantity(id, newQuantity);
+    public BookDTO changeQuantity(@PathVariable Book book, @RequestBody int newQuantity) {
+        return bookService.changeQuantity(book, newQuantity);
     }
 
     @PutMapping()

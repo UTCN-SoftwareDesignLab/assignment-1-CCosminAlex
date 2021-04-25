@@ -46,9 +46,9 @@ public class BookService {
         );
     }
 
-    public BookDTO changeQuantity(Long id, int newQuantity) {
-        Book book = findById(id);
-        book.setQuantity(newQuantity);
+    public BookDTO changeQuantity(Book sellBook, int newQuantity) {
+        Book book = findById(sellBook.getId());
+        book.setQuantity(book.getQuantity()-newQuantity);
         return bookMapper.toDto(
                 bookRepository.save(book)
         );

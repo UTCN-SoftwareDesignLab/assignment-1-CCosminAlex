@@ -15,11 +15,10 @@
           <v-text-field v-model="book.genre" label="Genre" />
           <v-text-field v-model="book.price" label="Price" />
           <v-text-field v-model="book.quantity" label="Quantity" />
-          <v-text-field v-model="amount" label="Amount to sell" />
         </v-form>
         <v-card-actions>
           <v-btn @click="persist">
-            {{"Sell book" }}
+            {{ "Sell book" }}
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -29,30 +28,33 @@
 
 <script>
 import api from "../api";
+
+
 export default {
   name: "SellDialog",
   props: {
     book:Object,
-    amount: Number,
     opened: Boolean,
   },
+
+
+
   methods: {
     persist() {
-      if(this.amount <= this.book.quantity) {
-        api.sell
-            .changeQuantity({
+      if(this.book.quantity !== 0) {
+        api.books
+        .edit({
               id: this.book.id,
               title: this.book.title,
               author: this.book.author,
               genre: this.book.genre,
               price: this.book.price,
-              quantity: this.book.quantity,
-            }, this.amount)
+              quantity: this.book.quantity - 1,
+            })
             .then(() => this.$emit("refresh"));
       }
       else{
-        this.$alert("Not enough quantity")
-            .then(() => this.$emit("refresh"));
+            this.$emit("refresh");
       }
     },
   },

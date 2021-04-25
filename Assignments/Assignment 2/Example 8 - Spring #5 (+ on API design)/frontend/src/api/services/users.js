@@ -8,4 +8,19 @@ export default {
       }
     );
   },
+  edit( user ) {
+    return HTTP.put(BASE_URL + "/users", user, {headers: authHeader()}).then(
+        (response) => {
+          return response.data;
+        }
+    );
+  },
+
+    create( user ) {
+        return HTTP.post(BASE_URL + "/users", user, {headers: authHeader()}).then(
+            (response) => {
+                return response.data;
+            }
+        );
+    }
 };

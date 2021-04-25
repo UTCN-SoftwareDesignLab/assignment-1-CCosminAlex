@@ -1,10 +1,10 @@
 package com.lab4.demo.user;
 
+import com.lab4.demo.book.model.dto.BookDTO;
+import com.lab4.demo.user.dto.UserDTO;
 import com.lab4.demo.user.dto.UserListDTO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,4 +22,12 @@ public class UserController {
         return userService.allUsersForList();
     }
 
+    @PutMapping
+    public UserDTO edit(@RequestBody UserDTO userDTO) {
+        return userService.editUser(userDTO);
+    }
+    @PostMapping
+    public UserDTO create(@RequestBody UserDTO userDTO) {
+        return userService.createUser(userDTO);
+    }
 }

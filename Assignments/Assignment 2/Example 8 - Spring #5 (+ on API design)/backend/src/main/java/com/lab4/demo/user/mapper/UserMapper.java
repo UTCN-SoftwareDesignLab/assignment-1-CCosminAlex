@@ -1,5 +1,8 @@
 package com.lab4.demo.user.mapper;
 
+import com.lab4.demo.book.model.Book;
+import com.lab4.demo.book.model.dto.BookDTO;
+import com.lab4.demo.user.dto.UserDTO;
 import com.lab4.demo.user.dto.UserListDTO;
 import com.lab4.demo.user.dto.UserMinimalDTO;
 import com.lab4.demo.user.model.Users;import org.mapstruct.*;
@@ -24,4 +27,8 @@ public interface UserMapper {
     default void populateRoles(Users users, @MappingTarget UserListDTO userListDTO) {
         userListDTO.setRoles(users.getRoles().stream().map(role -> role.getName().name()).collect(Collectors.toSet()));
     }
+
+    UserDTO toDto(Users users);
+
+    Users fromDto(UserDTO userDTO);
 }

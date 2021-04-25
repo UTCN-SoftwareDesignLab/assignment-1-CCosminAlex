@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-card-title>
-      Book
+      SellBook
       <v-spacer></v-spacer>
       <v-text-field
         v-model="search"
@@ -10,30 +10,30 @@
         single-line
         hide-details
       ></v-text-field>
-      <v-btn @click="addBook">Create Book</v-btn>
-      <v-btn @click="sellBook">Sell Book</v-btn>
+      <v-btn @click="edit">Sell Book</v-btn>
     </v-card-title>
     <v-data-table
-      :headers="headers"
-      :items="books"
-      :search="search"
-      @click:row="edit"
+        :headers="headers"
+        :items="books"
+        :search="search"
+        @click:row="edit"
     ></v-data-table>
-    <BookDialog
+    <SellDialog
       :opened="dialogVisible"
       :book="selectedBook"
       @refresh="refreshList"
-    ></BookDialog>
+    ></SellDialog>
   </v-card>
 </template>
 
 <script>
 import api from "../api";
-import BookDialog from "../components/BookDialog";
+import SellDialog from "@/components/SellDialog";
+
 
 export default {
   name: "BookList",
-  components: { BookDialog },
+  components: { SellDialog },
   data() {
     return {
       books: [],
@@ -55,11 +55,8 @@ export default {
     };
   },
   methods: {
-    edit(book) {
-      this.selectedBook = book;
-      this.dialogVisible = true;
-    },
-    addBook() {
+    edit(idBook) {
+      this.selectedBook=idBook;
       this.dialogVisible = true;
     },
     async refreshList() {

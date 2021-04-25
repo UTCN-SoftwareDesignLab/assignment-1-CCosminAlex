@@ -15,6 +15,18 @@ const routes = [
     component: Login,
   },
   {
+    path: "/sell",
+    name: "BookList",
+    component: BookList,
+    beforeEnter: (to, from, next) => {
+      if (store.state.status.loggedIn) {
+        next();
+      } else {
+        next({ name: "BookList"});
+      }
+    },
+  },
+  {
     path: "/users",
     name: "Users",
     component: UserList,
