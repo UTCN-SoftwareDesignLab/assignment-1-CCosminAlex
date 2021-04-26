@@ -28,5 +28,13 @@ export default {
           return response.data;
         }
     );
-  }
+  },
+    deleteBook( book ) {
+        return HTTP.delete(BASE_URL + "/books/" + book.id , {
+            headers: authHeader(),}).then();
+
+    },
+    generateReport(type){
+        return HTTP.get(BASE_URL + "/books/export/" + type, { headers: authHeader() })
+    },
 };

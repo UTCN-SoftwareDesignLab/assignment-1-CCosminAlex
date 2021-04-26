@@ -22,5 +22,10 @@ export default {
                 return response.data;
             }
         );
-    }
+    },
+    deleteUser( user) {
+        return HTTP.delete(BASE_URL + "/users/" + user.id , {
+            headers: authHeader(),}).then();
+
+    },
 };

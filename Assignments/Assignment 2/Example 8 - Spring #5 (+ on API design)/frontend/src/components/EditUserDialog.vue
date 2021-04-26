@@ -20,6 +20,9 @@
           <v-btn @click="persist">
             {{ isNew ? "Create"  : "Save" }}
           </v-btn>
+          <v-btn @click="DeleteUser">
+            {{ isNew ?  null : "Delete" }}
+          </v-btn>
         </v-card-actions>
       </v-card>
     </template>
@@ -58,6 +61,17 @@ export default {
             .then(() => this.$emit("refresh"));
       }
     },
+    DeleteUser(){
+      api.users
+          .deleteUser({
+            id: this.user.id,
+            name: this.user.username,
+            email: this.user.email,
+            password: this.user.password,
+            role: this.user.roles
+          })
+          .then(() => this.$emit("refresh"));
+    }
   },
   computed: {
     isNew: function () {

@@ -1,6 +1,7 @@
 package com.lab4.demo;
 
-import com.lab4.demo.item.ItemRepository;
+
+import com.lab4.demo.book.BookRepository;
 import com.lab4.demo.security.AuthService;
 import com.lab4.demo.security.dto.SignupRequest;
 import com.lab4.demo.user.RoleRepository;
@@ -25,7 +26,7 @@ public class Bootstrapper implements ApplicationListener<ApplicationReadyEvent> 
 
     private final AuthService authService;
 
-    private final ItemRepository itemRepository;
+    private final BookRepository itemRepository;
 
     @Value("${app.bootstrap}")
     private Boolean bootstrap;

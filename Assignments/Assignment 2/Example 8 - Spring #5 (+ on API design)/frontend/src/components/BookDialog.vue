@@ -20,6 +20,9 @@
           <v-btn @click="persist">
             {{ isNew ? "Create"  : "Save" }}
           </v-btn>
+          <v-btn @click="DeleteBook">
+            {{ isNew ?  null : "Delete" }}
+          </v-btn>
         </v-card-actions>
       </v-card>
     </template>
@@ -28,6 +31,7 @@
 
 <script>
 import api from "../api";
+
 
 export default {
   name: "BookDialog",
@@ -39,34 +43,51 @@ export default {
     persist() {
       if (this.isNew) {
         api.books
-          .create({
-            title: this.book.title,
-            author: this.book.author,
-            genre: this.book.genre,
-            quantity: this.book.quantity,
-            price: this.book.price,
-          })
-          .then(() => this.$emit("refresh"));
+            .create({
+              title: this.book.title,
+              author: this.book.author,
+              genre: this.book.genre,
+              quantity: this.book.quantity,
+              price: this.book.price,
+            })
+            .then(() => this.$emit("refresh"));
       } else {
         api.books
-          .edit({
-            id: this.book.id,
-            title: this.book.title,
-            author: this.book.author,
-            genre: this.book.genre,
-            quantity: this.book.quantity,
-            price: this.book.price,
-          })
-          .then(() => this.$emit("refresh"));
+            .edit({
+              id: this.book.id,
+              title: this.book.title,
+              author: this.book.author,
+              genre: this.book.genre,
+              quantity: this.book.quantity,
+              price: this.book.price,
+            })
+            .then(() => this.$emit("refresh"));
       }
+
+
     },
-  },
-  computed: {
-    isNew: function () {
-      return !this.book.id;
+    DeleteBook(){
+      api.books
+      .deleteBook({
+        id: this.book.id,
+        title: this.book.title,
+        author: this.book.author,
+        genre: this.book.genre,
+        quantity: this.book.quantity,
+        price: this.book.price,
+      })
+          .then(() => this.$emit("refresh"));
+    }
+
     },
-  },
-};
+
+    computed: {
+      isNew: function () {
+        return !this.book.id;
+      },
+    },
+  };
+
 </script>
 
 <style scoped></style>

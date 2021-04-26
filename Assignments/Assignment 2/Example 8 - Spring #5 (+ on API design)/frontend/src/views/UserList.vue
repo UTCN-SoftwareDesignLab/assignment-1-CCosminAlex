@@ -62,6 +62,9 @@ export default {
     edit(user){
       this.selectedUser=user;
       this.dialogVisible = true;
+    },
+    deleteUser(){
+      this.dialogVisible = true;
     }
 
 

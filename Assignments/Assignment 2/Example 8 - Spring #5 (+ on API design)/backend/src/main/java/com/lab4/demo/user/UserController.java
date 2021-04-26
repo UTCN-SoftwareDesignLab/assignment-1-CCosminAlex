@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.lab4.demo.UrlMapping.ENTITY;
 import static com.lab4.demo.UrlMapping.USER;
 
 @RestController
@@ -29,5 +30,10 @@ public class UserController {
     @PostMapping
     public UserDTO create(@RequestBody UserDTO userDTO) {
         return userService.createUser(userDTO);
+    }
+
+    @DeleteMapping(ENTITY)
+    public void deleteUser(@PathVariable Long id) {
+        userService.delete(id);
     }
 }

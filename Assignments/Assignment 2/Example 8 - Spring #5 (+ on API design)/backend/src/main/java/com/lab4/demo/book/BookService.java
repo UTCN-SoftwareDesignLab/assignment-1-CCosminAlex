@@ -1,13 +1,11 @@
 package com.lab4.demo.book;
 
-import com.lab4.demo.book.BookRepository;
 import com.lab4.demo.book.model.Book;
 import com.lab4.demo.book.model.dto.BookDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
-import java.io.Console;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -59,7 +57,12 @@ public class BookService {
     }
 
     public void delete(Long id) {
-        bookRepository.deleteById(id);
+        Book book = findById(id);
+        bookRepository.delete(book);
+    }
+
+    public List<Book> getBookInStore(){
+        return bookRepository.findBookByQuantity(0);
     }
 
 

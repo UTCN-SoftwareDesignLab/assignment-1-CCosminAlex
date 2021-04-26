@@ -10,6 +10,7 @@ import com.lab4.demo.user.model.ERole;
 import com.lab4.demo.user.model.Role;
 import com.lab4.demo.user.model.Users;
 import lombok.RequiredArgsConstructor;
+import org.mapstruct.control.MappingControl;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -81,6 +82,11 @@ public class UserService {
 
         return userMapper.toDto(userRepository.save(user));
 
+    }
+
+    public void delete(Long id) {
+        Users users = findById(id);
+        userRepository.delete(users);
     }
 
 

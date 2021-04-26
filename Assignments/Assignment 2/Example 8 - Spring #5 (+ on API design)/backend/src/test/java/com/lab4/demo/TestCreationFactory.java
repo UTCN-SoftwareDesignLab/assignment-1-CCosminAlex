@@ -1,8 +1,5 @@
 package com.lab4.demo;
 
-import com.lab4.demo.item.model.Item;
-import com.lab4.demo.item.model.dto.ItemDTO;
-import com.lab4.demo.review.model.dto.ReviewDTO;
 import com.lab4.demo.user.dto.UserListDTO;
 
 import java.util.List;
@@ -27,12 +24,6 @@ public class TestCreationFactory {
 
         if (cls.equals(UserListDTO.class)) {
             supplier = TestCreationFactory::newUserListDTO;
-        } else if (cls.equals(Item.class)) {
-            supplier = TestCreationFactory::newItem;
-        } else if (cls.equals(ItemDTO.class)) {
-            supplier = TestCreationFactory::newItemDTO;
-        } else if (cls.equals(ReviewDTO.class)) {
-            supplier = TestCreationFactory::newReviewDTO;
         } else {
             supplier = () -> new String("You failed.");
         }
@@ -52,29 +43,7 @@ public class TestCreationFactory {
                 .build();
     }
 
-    private static Item newItem() {
-        return Item.builder()
-                .id(randomLong())
-                .name(randomString())
-                .description(randomString())
-                .build();
-    }
 
-    private static ItemDTO newItemDTO() {
-        return ItemDTO.builder()
-                .id(randomLong())
-                .name(randomString())
-                .description(randomString())
-                .build();
-    }
-
-    private static ReviewDTO newReviewDTO() {
-        return ReviewDTO.builder()
-                .id(randomLong())
-                .text(randomString())
-                .reviewer(randomString())
-                .build();
-    }
 
     public static String randomEmail() {
         return randomString() + "@" + randomString() + ".com";

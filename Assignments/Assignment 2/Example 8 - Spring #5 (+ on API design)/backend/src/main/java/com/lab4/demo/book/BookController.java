@@ -2,12 +2,9 @@ package com.lab4.demo.book;
 
 import com.lab4.demo.book.model.Book;
 import com.lab4.demo.book.model.dto.BookDTO;
-import com.lab4.demo.item.ItemService;
-import com.lab4.demo.item.model.dto.ItemDTO;
 import com.lab4.demo.report.ReportServiceFactory;
 import com.lab4.demo.report.ReportType;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -44,7 +41,7 @@ public class BookController {
     }
 
     @DeleteMapping(ENTITY)
-    public void delete(@PathVariable Long id) {
+    public void deleteBook(@PathVariable Long id) {
         bookService.delete(id);
     }
 
@@ -55,7 +52,7 @@ public class BookController {
 
     @GetMapping(EXPORT_REPORT)
     public String exportReport(@PathVariable ReportType type) {
-        return reportServiceFactory.getReportService(type).export();
+        return reportServiceFactory.getReportService(type).export(bookService.getBookInStore());
     }
 
 }

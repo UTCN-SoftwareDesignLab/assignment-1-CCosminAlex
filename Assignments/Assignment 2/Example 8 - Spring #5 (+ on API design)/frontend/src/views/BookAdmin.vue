@@ -3,6 +3,8 @@
     <v-card-title>
       Book
       <v-spacer></v-spacer>
+      <v-btn @click="exportPDF">Export PDF</v-btn>
+      <v-btn @click="exportCSV">Export CSV</v-btn>
       <v-text-field
           v-model="search"
           append-icon="mdi-magnify"
@@ -60,8 +62,17 @@ export default {
       this.selectedBook = idBook;
       this.dialogVisible = true;
     },
+    deleteBook(){
+      this.dialogVisible = true;
+    },
     addBook() {
       this.dialogVisible = true;
+    },
+    async exportPDF() {
+      await api.books.generateReport("PDF");
+    },
+    async exportCSV() {
+      await api.books.generateReport("CSV");
     },
     async refreshList() {
       this.dialogVisible = false;
